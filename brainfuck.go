@@ -20,13 +20,13 @@ import (
     "fmt"
     "flag"
     "os"
+    "ioutil"
     )
 
-func interpreter() {
-    tape := make([]byte, 30000)
+func interpreter(code []byte) {
+    tape := make([]byte, 1000)
     pointer := 15000
     codeptr := 0
-    code := make([]byte, 0, 10000)
     one_byte := make([]byte, 1, 1)
     for code[codeptr] != 0 {
         switch code[codeptr] {
@@ -72,21 +72,26 @@ func interpreter() {
     }
 }
 
-func load_file(filename string) {
-
+func is_bf_char(item byte) bool {
+    chars := [8]byte{'>', '<', '+', '-', '.', ',', '[', ']'}
+    var contained bool
+    for _, v := range chars{
+        if item == v {
+            contained = true
+            break
+        }
+    }
+    return contained
 }
 
 func main() {
     filename := flag.String("file", "", "Specify the codefile to use.")
-    file, err := os.Open(*filename)
-    if err != nil {
-        return
+    source := ioutil.ReadFile(filename)
+    code := make([]byte, 10)
+    for _, v := range code {
+        if is_bf_char(v) {
+            code = append(code, v)
+        }
     }
-
-    n, err := file.Read(code)
-    fmt.Printf("Read %d bytes.", n)
-    if err != nil {
-        return
-    }
-
+    interpreter(code)
 }
