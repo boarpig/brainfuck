@@ -1,9 +1,9 @@
-brainfuck:
+brainfuck: brainfuck.go
 	6g brainfuck.go
 	6l -o brainfuck brainfuck.6
 
 run:
-	./brainfuck code.txt
+	./brainfuck -src hello.bf
 
 clean:
 	rm brainfuck.6
